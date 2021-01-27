@@ -14,13 +14,14 @@ const validateToken = require("./validate-token");
 const logger = require("./winston-logger");
 const { bookmarks } = require("./dummy-store");
 const router = express.Router();
+const bodyParser = express.json();
 
 router
   .route("/bookmarks")
   .get((req, res) => {
     res.json(store.bookmarks);
   })
-  .post((req, res) => {
+  .post(bodyParser, (req, res) => {
     // use object destructuring to access the req body
     const { title, url, description, rating } = req.body;
 
