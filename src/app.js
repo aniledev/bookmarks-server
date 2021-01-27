@@ -4,7 +4,6 @@ const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
-const winston = require("winston");
 const { NODE_ENV, PORT } = require("./config");
 const app = express();
 const store = require("./dummy-store");
@@ -12,23 +11,10 @@ const { stream } = require("winston");
 const uuid = require("uuid").v4;
 const { isUri } = require("valid-url");
 const validateToken = require("./validate-token");
+const logger = require("./winston-logger");
 
 // CONFIGURE LOGGING
 const morganOption = NODE_ENV === "production" ? "tiny" : "dev";
-
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.json(),
-  transports: [new winston.transports.File({ filename: "info.log" })],
-});
-
-if (NODE_ENV !== "production") {
-  logger.add(
-    new winston.transports.Console({
-      format: winston.format.simple(),
-    })
-  );
-}
 
 //STANDARD MIDDLEWARE
 app.use(morgan(morganOption));
