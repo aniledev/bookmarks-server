@@ -14,3 +14,5 @@
 {"message":"Bookmark with 8d89e9d0-5b7a-478e-855a-5547f825a272 not found.","level":"error"}
 {"message":"Bookmark created successfully!","level":"info"}
 {"message":"Bookmark created successfully!","level":"info"}
+{"message":"Bookmark with id b816826d-28be-4d5a-a66d-8f94da6dae49 has been deleted.","level":"info"}
+{"message":"Bookmark with b816826d-28be-4d5a-a66d-8f94da6dae49 not found.","level":"error"}

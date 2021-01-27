@@ -1,18 +1,10 @@
 // refactor endpoints into router
 require("dotenv").config();
 const express = require("express");
-const morgan = require("morgan");
-const helmet = require("helmet");
-const cors = require("cors");
-const { NODE_ENV, PORT } = require("./config");
-const app = express();
 const store = require("./dummy-store");
-const { stream } = require("winston");
 const uuid = require("uuid").v4;
 const { isUri } = require("valid-url");
-const validateToken = require("./validate-token");
 const logger = require("./winston-logger");
-const { bookmarks } = require("./dummy-store");
 const router = express.Router();
 const bodyParser = express.json();
 

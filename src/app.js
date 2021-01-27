@@ -4,14 +4,9 @@ const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
-const { NODE_ENV, PORT } = require("./config");
+const { NODE_ENV } = require("./config");
 const app = express();
-const store = require("./dummy-store");
-const { stream } = require("winston");
-const uuid = require("uuid").v4;
-const { isUri } = require("valid-url");
 const validateToken = require("./validate-token");
-const logger = require("./winston-logger");
 const router = require("./router");
 
 // CONFIGURE LOGGING
@@ -28,7 +23,6 @@ app.use(validateToken);
 
 //ROUTES
 app.use(router);
-
 
 // CATCH ANY THROWN ERRORS AND THEN DEFINE THE ERROR AND KEEP THE APPLICATION RUNNING;
 app.use(function errorHandler(error, req, res, next) {
