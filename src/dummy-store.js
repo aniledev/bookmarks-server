@@ -1,5 +1,5 @@
 // this module holds dummy store data for the bookmarks server for testing
-const uuid = require("uuid/v4");
+const uuid = require("uuid").v4;
 
 const bookmarks = [
   {
@@ -10,7 +10,7 @@ const bookmarks = [
     rating: 5,
   },
   {
-    id: uuid,
+    id: uuid(),
     title: "Google",
     url: "https://www.google.com",
     description: "Where we find everything else",

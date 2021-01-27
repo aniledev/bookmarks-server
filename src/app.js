@@ -8,7 +8,7 @@ const winston = require("winston");
 const { NODE_ENV, PORT } = require("./config");
 const app = express();
 const store = require("./dummy-store");
-const uuid = require("uuid/v4");
+const uuid = require("uuid").v4;
 
 // CONFIGURE LOGGING
 const morganOption = NODE_ENV === "production" ? "tiny" : "dev";
