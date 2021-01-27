@@ -44,15 +44,29 @@ app.use(function validationBearerToken(req, res, next) {
 });
 
 //ROUTES
-// Write a route handler for the endpoint GET /bookmarks that returns a list of bookmarks
+// endpoint GET /bookmarks that returns a list of bookmarks
 app.get("/bookmarks", (req, res) => {
   res.json(store.bookmarks);
 });
 
-// Write a route handler for the endpoint GET /bookmarks/:id that returns a single bookmark with the given ID, return 404 Not Found if the ID is not valid
+// endpoint GET /bookmarks/:id that returns a single bookmark with the given ID, return 404 Not Found if the ID is not valid
 app.get("/bookmarks/:bookmark_id", (req, res) => {
-  res.send("Hello, specific bookmark!");
+  // use object destructuring to get the bookmark id
+  const { bookmark_id } = req.params;
+
+  // use find method to find bookmark with a specific id
+  const bookmark = store.bookmarks.find(
+    (bookmark) => bookmark.id == bookmark_id
+  );
+
+  // validate if there isn't a bookmark that matches that id
+  if (!bookmark) {
+    logger.error(`Bookmark with ${bookmark_id} not found.`);
+    return res.status(400).send("Bookmark not found. Please try again.");
+  }
+  res.json(bookmark);
 });
+
 // Write a route handler for POST /bookmarks that accepts a JSON object representing a bookmark and adds it to the list of bookmarks after validation.
 app.post("/bookmarks", (req, res) => {
   res.send("Hello, new bookmark!");
