@@ -11,6 +11,7 @@ const store = require("./dummy-store");
 const { stream } = require("winston");
 const uuid = require("uuid").v4;
 const { isUri } = require("valid-url");
+const validateToken = require("./validate-token");
 
 // CONFIGURE LOGGING
 const morganOption = NODE_ENV === "production" ? "tiny" : "dev";
@@ -36,14 +37,7 @@ app.use(cors());
 app.use(express.json());
 
 // API KEY HANDLING MIDDLE ON THE SERVER
-app.use(function validationBearerToken(req, res, next) {
-  const apiToken = process.env.API_TOKEN;
-  const authToken = req.get("Authorization");
-  if (!authToken || authToken.split(" ")[1] !== apiToken) {
-    return res.status(401).json({ error: "Unauthorized request/" });
-  }
-  next();
-});
+app.use(validateToken);
 
 //ROUTES
 // endpoint GET /bookmarks that returns a list of bookmarks
