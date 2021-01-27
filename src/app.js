@@ -12,6 +12,7 @@ const uuid = require("uuid").v4;
 const { isUri } = require("valid-url");
 const validateToken = require("./validate-token");
 const logger = require("./winston-logger");
+const router = require("./router");
 
 // CONFIGURE LOGGING
 const morganOption = NODE_ENV === "production" ? "tiny" : "dev";
@@ -26,6 +27,8 @@ app.use(express.json());
 app.use(validateToken);
 
 //ROUTES
+app.use(router);
+
 // endpoint GET /bookmarks that returns a list of bookmarks
 app.get("/bookmarks", (req, res) => {
   res.json(store.bookmarks);
