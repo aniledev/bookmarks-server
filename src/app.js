@@ -10,7 +10,7 @@ const app = express();
 const store = require("./dummy-store");
 const { stream } = require("winston");
 const uuid = require("uuid").v4;
-const { isUrl } = require("valid-url");
+const { isUri } = require("valid-url");
 
 // CONFIGURE LOGGING
 const morganOption = NODE_ENV === "production" ? "tiny" : "dev";
@@ -83,16 +83,24 @@ app.post("/bookmarks", (req, res) => {
   }
 
   // validate if the number isn't a number or if its outside 1 to 5,
-  if (!Number.isNaN(rating) || rating < 0 || rating > 5) {
+  if (Number.isNaN(rating) || rating < 0 || rating > 5) {
     logger.error(`Invalid rating '${rating}' entered.`);
     return res.status(400).send("Rating must be a number between 0 and 5.");
   }
 
   // THIS IS THE PART I HAD TO LOOK AT THE SOLUTION FOR AS I DIDN'T KNOW IF THERE WERE REGEX TO VALIDATE AN URL LIKE AN EMAIL
-  if (!isUrl(url)) {
+  if (!isUri(url)) {
     logger.error(`Invalid url '${url}' entered.`);
     return res.status(400).send(`URL must be a valid URL.`);
   }
+
+  // create a bookmark object to push to the store based on the req body after validation
+  const bookmark = { id: uuid(), title, url, description, rating };
+
+  store.bookmarks.push(bookmark);
+
+  logger.info("Bookmark created successfully!");
+  return res.status(200).json(bookmark).send("Bookmark created successfully.");
 });
 // Write a route handler for the endpoint DELETE /bookmarks/:id that deletes the bookmark with the given ID.
 app.delete("/bookmarks/:bookmark_id", (req, res) => {
