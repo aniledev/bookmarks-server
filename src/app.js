@@ -43,16 +43,23 @@ app.use(function validationBearerToken(req, res, next) {
 
 //ROUTES
 // Write a route handler for the endpoint GET /bookmarks that returns a list of bookmarks
-
-// Write a route handler for the endpoint GET /bookmarks/:id that returns a single bookmark with the given ID, return 404 Not Found if the ID is not valid
-
-// Write a route handler for POST /bookmarks that accepts a JSON object representing a bookmark and adds it to the list of bookmarks after validation.
-
-// Write a route handler for the endpoint DELETE /bookmarks/:id that deletes the bookmark with the given ID.
-
-app.get("/", (req, res) => {
+app.get("/bookmarks", (req, res) => {
   res.send("Hello, world!");
 });
+
+// Write a route handler for the endpoint GET /bookmarks/:id that returns a single bookmark with the given ID, return 404 Not Found if the ID is not valid
+app.get("/bookmarks/:bookmark_id", (req, res) => {
+  res.send("Hello, world!");
+});
+// Write a route handler for POST /bookmarks that accepts a JSON object representing a bookmark and adds it to the list of bookmarks after validation.
+app.post("/bookmarks", (req, res) => {
+  res.send("Hello, world!");
+});
+// Write a route handler for the endpoint DELETE /bookmarks/:id that deletes the bookmark with the given ID.
+app.delete("/bookmarks/:bookmark_id", (req, res) => {
+  res.send("Hello, world!");
+});
+
 
 // CATCH ANY THROWN ERRORS AND THEN DEFINE THE ERROR AND KEEP THE APPLICATION RUNNING;
 //STILL MIDDLEWARE
