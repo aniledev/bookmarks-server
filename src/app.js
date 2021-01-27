@@ -70,7 +70,28 @@ app.get("/bookmarks/:bookmark_id", (req, res) => {
 
 // Write a route handler for POST /bookmarks that accepts a JSON object representing a bookmark and adds it to the list of bookmarks after validation.
 app.post("/bookmarks", (req, res) => {
-  res.send("Hello, new bookmark!");
+  // use object destructuring to access the req body
+  const { title, url, description, rating } = req.body;
+
+  //use a for of loop instead of forEach because we're dealing with an object
+  for (const query of ["title", "url", "description"]) {
+    if (!req.body[query]) {
+      logger.error(`${query} is required.`);
+      return res.status(400).send(`${field} is required. Please try again.`);
+    }
+  }
+
+  // validate if the number isn't a number or if its outside 1 to 5,
+  if (!Number.isNaN(rating) || rating < 0 || rating > 5) {
+    logger.error(`Invalid rating '${rating}' entered`);
+    return res.status(400).send("Rating must be a number between 0 and 5.");
+  }
+
+  // THIS IS THE PART I HAD TO LOOK AT THE SOLUTION FOR AS I DIDN'T KNOW IF THERE WERE REGEX TO VALIDATE AN URL LIKE AN EMAIL
+  if (!isWebUri(url)) {
+    logger.error(`Invalid url '${url}' supplied`);
+    return res.status(400).send(`'url' must be a valid URL`);
+  }
 });
 // Write a route handler for the endpoint DELETE /bookmarks/:id that deletes the bookmark with the given ID.
 app.delete("/bookmarks/:bookmark_id", (req, res) => {
@@ -94,7 +115,6 @@ app.delete("/bookmarks/:bookmark_id", (req, res) => {
 });
 
 // CATCH ANY THROWN ERRORS AND THEN DEFINE THE ERROR AND KEEP THE APPLICATION RUNNING;
-//STILL MIDDLEWARE
 app.use(function errorHandler(error, req, res, next) {
   let response;
   if (NODE_ENV === "production") {
