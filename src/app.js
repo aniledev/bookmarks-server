@@ -8,6 +8,7 @@ const winston = require("winston");
 const { NODE_ENV, PORT } = require("./config");
 const app = express();
 const store = require("./dummy-store");
+const { stream } = require("winston");
 const uuid = require("uuid").v4;
 
 // CONFIGURE LOGGING
@@ -49,7 +50,7 @@ app.get("/bookmarks", (req, res) => {
   res.json(store.bookmarks);
 });
 
-// endpoint GET /bookmarks/:id that returns a single bookmark with the given ID, return 404 Not Found if the ID is not valid
+// endpoint GET /bookmarks/:id that returns a single bookmark with the given ID, return 404 Not Found if the ID is not found
 app.get("/bookmarks/:bookmark_id", (req, res) => {
   // use object destructuring to get the bookmark id
   const { bookmark_id } = req.params;
@@ -73,7 +74,23 @@ app.post("/bookmarks", (req, res) => {
 });
 // Write a route handler for the endpoint DELETE /bookmarks/:id that deletes the bookmark with the given ID.
 app.delete("/bookmarks/:bookmark_id", (req, res) => {
-  res.send("Hello, deleted bookmark!");
+  // destructure the req object to specific the bookmark id of the one we want to delete
+  const { bookmark_id } = req.params;
+  // use the findIndex method to find the index of the bookmark in the array that we want to delete
+  const index = store.bookmarks.findIndex(
+    (bookmark) => bookmark.id === bookmark_id
+  );
+
+  // what if they want to delete a bookmark that doesn't exist
+  if (index === -1) {
+    logger.error(`Bookmark with id ${bookmark_id} not found.`);
+    return res.status(400).send("Bookmark not found. Please try again.");
+  }
+
+  // use the splice method to remove 1 from the array at the index number; use end() because no response is necessary
+  store.bookmarks.splice(index, 1);
+  logger.info(`Bookmark with id ${bookmark_id} has been deleted.`);
+  res.status(204).end();
 });
 
 // CATCH ANY THROWN ERRORS AND THEN DEFINE THE ERROR AND KEEP THE APPLICATION RUNNING;
