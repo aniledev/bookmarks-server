@@ -7,6 +7,8 @@ const cors = require("cors");
 const winston = require("winston");
 const { NODE_ENV, PORT } = require("./config");
 const app = express();
+const store = require("./dummy-store");
+const uuid = require("uuid/v4");
 
 // CONFIGURE LOGGING
 const morganOption = NODE_ENV === "production" ? "tiny" : "dev";
@@ -44,7 +46,7 @@ app.use(function validationBearerToken(req, res, next) {
 //ROUTES
 // Write a route handler for the endpoint GET /bookmarks that returns a list of bookmarks
 app.get("/bookmarks", (req, res) => {
-  res.send("Hello, bookmarks!");
+  res.json(store.bookmarks);
 });
 
 // Write a route handler for the endpoint GET /bookmarks/:id that returns a single bookmark with the given ID, return 404 Not Found if the ID is not valid
